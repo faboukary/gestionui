@@ -1,0 +1,224 @@
+<div class="border">
+    <button class="btn btn-md btn-outline-primary" (click)="open(content)">
+      <i class="fa fa-user"></i>Nouvelle Prestation</button>
+</div>
+<div class="container">
+  <form>
+    <div class="form-group form-inline">
+      Search prestation by libelle: 
+<input class="form-control ml-2" type="text" id="searchTerm" name="searchTerm" [(ngModel)]="searchTerm"
+        (input)="search($event.target)" />
+    </div>
+  </form>
+    <table class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>ID</th>
+        <th>Libelle</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+
+        <tr *ngFor="let prestation of ListeDesPrestations | slice: (page -1) * pageSize : page * pageSize; let i=index; ">
+        
+        <td scope="row">{{ (page -1) * pageSize + i + 1 }}</td>
+
+        <td><span>{{prestation.id}}</span></td>
+        <td><span>{{prestation.libelle}}</span></td>
+        <td><span>{{prestation.description}}</span></td>
+        <td>
+            <button class="btn btn-sm btn-info" (click)="openDetails(contentDetails, prestation)">
+              <i class="fa fa-search"></i>Details</button>
+            <button class="btn btn-sm btn-warning" (click)="openEdit(contentEdit, prestation)">
+              <i class="fa fa-edit"></i>Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="openDelete(contentDelete, prestation)">
+              <i class="fa fa-remove"></i>Delete</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <hr/>
+    <div class="d-flex justify-content-between p-2">
+        <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshListeDesPrestations()">
+        </ngb-pagination>             
+        <select class="form-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshListeDesPrestations()">
+          <option [ngValue]="5">5 items per page</option>
+          <option [ngValue]="10">10 items per page</option>
+          <option [ngValue]="15">15 items per page</option>
+          <option [ngValue]="20">20 items per page</option>
+          <option [ngValue]="25">25 items per page</option>
+          <option [ngValue]="30">30 items per page</option>
+          <option [ngValue]="35">35 items per page</option>
+          <option [ngValue]="40">40 items per page</option>
+          <option [ngValue]="45">45 items per page</option>
+          <option [ngValue]="50">50 items per page</option>
+        </select>                
+    </div>
+
+  </div>
+
+  <ng-template #content let-modal>
+
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Nouvelle Prestation </h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <form #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate>
+
+        <div class="form-group">
+          <label for="id">ID </label>
+          <div class="input-group">
+            <input id="id" name="id" class="form-control" ngModel>
+          </div>
+        </div>
+        
+        <div class="form-group">
+              <label for="libelle">Libelle </label>
+              <div class="input-group">
+                <input id="libelle" name="libelle" class="form-control" ngModel>
+              </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Description </label>
+          <div class="input-group">
+            <input id="description" name="description" class="form-control" ngModel>
+          </div>
+        </div>
+      <table align="center">
+        <tr>
+            <th align="center">
+                <div class="border text-center">
+                  <button data-dismiss="modal" class="btn btn-info">Enregistrer</button>
+                </div>
+          </th>
+          <th align="center">
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Annuler</button>
+              </div>
+          </th>
+        </tr>
+      </table>
+
+  </form>
+
+  </div>
+
+  </ng-template>
+
+  
+  <ng-template #contentDetails let-modal>
+
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title"> Details Prestation </h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <form>
+
+        <div class="form-group">
+          <label>ID </label>
+          <div class="input-group">
+            <input id="fid" class="form-control" readonly>
+          </div>
+        </div>
+        
+        <div class="form-group">
+              <label>Libelle </label>
+              <div class="input-group">
+                <input id="flibelle" class="form-control" readonly>
+              </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Description </label>
+          <div class="input-group">
+            <input id="fdescription" class="form-control" readonly>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Annuler</button>
+        </div>
+
+  </form>
+
+  </div>
+
+  </ng-template>
+
+  
+  <ng-template #contentEdit let-modal>
+
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Edit Prestation </h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <form [formGroup]="editForm" novalidate>
+
+        <div class="form-group">
+          <label for="id">ID </label>
+          <div class="input-group">
+            <input formControlName="id" class="form-control" readonly>
+          </div>
+        </div>
+        
+        <div class="form-group">
+              <label for="libelle">Libelle </label>
+              <div class="input-group">
+                <input formControlName="libelle" class="form-control" >
+              </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Description </label>
+          <div class="input-group">
+            <input formControlName="description" class="form-control" >
+          </div>
+        </div>
+
+        <div class="border text-center"> <button data-dismiss="modal" class="btn btn-info" (click)="onSave()">Mettre a jour</button> </div>
+
+  </form>
+
+  </div>
+
+  </ng-template>
+
+
+  <ng-template #contentDelete let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Confirmer la suppression</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <h2>Etes-vous sur de vouloir supprimer cet enregistrement ?.</h2>
+      <div class="border text-center"> 
+        <button data-dismiss="modal" class="btn btn-danger" (click)="onDelete()">Oui, Supprimer !</button> 
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Annuler</button>
+    </div>
+  </ng-template>
+
